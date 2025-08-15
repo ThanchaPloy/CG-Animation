@@ -52,7 +52,7 @@ public class TestPro extends JPanel implements ActionListener {
         }
         //drawFullCoffin(g2, elapsed, getWidth(), getHeight());
             // เริ่มเปลี่ยนฉากหลังจาก 5 วินาที
-        if (sceneState == 0 && elapsed > 5000) {
+        if (sceneState == 0 && elapsed > 1000) {
             sceneState = 1;
             transitionStart = elapsed;
         }
@@ -105,7 +105,7 @@ public class TestPro extends JPanel implements ActionListener {
         drawLyingPerson(g2, cx, cy, 500);
 
         // ====== ฝาโลงเคลื่อนออกด้านขวา ======
-        float progress = Math.min(1.0f, elapsed / 3000f); // 3 วินาทีเปิดฝา
+        float progress = Math.min(1.0f, elapsed / 1000f); // 3 วินาทีเปิดฝา
         int xOffset = (int)(progress * (panelWidth * 0.5)); // เคลื่อนฝาไปทางขวา
 
         AffineTransform old = g2.getTransform();
@@ -207,7 +207,7 @@ public class TestPro extends JPanel implements ActionListener {
         // เริ่มต้นหลับตา (h เล็กมาก) แล้วค่อยๆ ลืมตา (h เพิ่มขึ้น)
         // หลับสนิทค้างไว้ 1 วินาทีแรก
         double blink;
-        if (elapsed < 1000) {
+        if (elapsed < 500) {
             blink = 0; // หลับสนิท
         } else {
             blink = Math.min(1, Math.max(0, (t - 0.15) * 1.2)); // 0=หลับ, 1=ลืมตา
@@ -300,12 +300,12 @@ public class TestPro extends JPanel implements ActionListener {
     private void drawBody(Graphics2D g2, int cx, int cy, int bodyW, int bodyH, int skinColor) {
         // คอ
         int neckW = (int)(bodyW * 0.12);
-        int neckH = (int)(bodyH * 0.48);
+        int neckH = (int)(bodyH * 0.46);
         int neckX = (cx - neckW / 2)+5;
         int neckY = cy-10;
 
         g2.setColor(new Color(skinColor));
-        g2.fillRoundRect(neckX, neckY, neckW, neckH, neckW/2, neckH/2);
+        g2.fillRoundRect(neckX, neckY+3, neckW, neckH, neckW/2, neckH/2);
          // สัดส่วนไหล่
         int shoulderW = (int)(bodyW * 0.37);
         int shoulderH = (int)(bodyH * 0.42);
@@ -332,24 +332,26 @@ public class TestPro extends JPanel implements ActionListener {
         g2.setColor(Color.darkGray); // สีชุด
         g2.fillPolygon(lowerTorso);
 
-        // แขนซ้าย
         int armW = (int)(bodyW * 0.074);
         int armH = (int)(bodyH * 1.52);
         int armY = cy + (int)(bodyH * 0.4);
         int armXLeft = cx - (int)(bodyW * 0.24)/2 - armW + 5;
-
-        g2.setColor(new Color(skinColor));
-        g2.fillRoundRect(armXLeft, armY, armW, armH, armW/2, armW);
-
-        // แขนขวา
         int armXRight = cx + (int)(bodyW * 0.24)/2 + 5;
-        g2.fillRoundRect(armXRight, armY, armW, armH, armW/2, armW);
 
         // มือ (วงรีเล็กๆ)
+        g2.setColor(new Color(skinColor));
         int handW = (int)(armW * 0.9);
         int handH = (int)(armW * 0.9);
         g2.fillOval(armXLeft + armW/2 - handW/2, armY + armH - handH/2, handW, handH); // มือซ้าย
         g2.fillOval(armXRight + armW/2 - handW/2, armY + armH - handH/2, handW, handH); // มือขวา
+
+        // แขนซ้าย
+        g2.setColor(new Color(240,240,240));
+        g2.fillRoundRect(armXLeft, armY, armW, armH, armW/2, armW);
+
+        // แขนขวา
+        g2.fillRoundRect(armXRight, armY, armW, armH, armW/2, armW);
+
 
         //วาดไหล่
         g2.setColor(new Color(240, 240, 240)); // สีเสื้อ
@@ -427,15 +429,15 @@ public class TestPro extends JPanel implements ActionListener {
         int panelH = getHeight();
 
         // พื้นหลัง
-        g2.setColor(new Color(30, 30, 30));
-        g2.fillRect(0, 0, panelW, panelH);
+        // g2.setColor(new Color(30, 30, 30));
+        // g2.fillRect(0, 0, panelW, panelH);
 
         // เวลาสำหรับสั่น
         long elapsed = System.currentTimeMillis() - startTime;
         double shake = Math.sin(elapsed * 0.015) * 3; // สั่นซ้ายขวา
 
         // วาดโทรศัพท์
-        int phoneW = 120, phoneH = 220;
+        int phoneW = 220, phoneH = 360;
         int phoneX = panelW/2 - phoneW/2 + (int)shake;
         int phoneY = panelH/2 - phoneH/2;
 
@@ -448,21 +450,43 @@ public class TestPro extends JPanel implements ActionListener {
 
         // ปุ่ม Home
         g2.setColor(new Color(180,180,180));
-        g2.fillOval(phoneX+phoneW/2-14, phoneY+phoneH-32, 28, 28);
+        g2.fillOval(phoneX+phoneW/2-14, phoneY+phoneH-42, 28, 28);
 
         // ข้อความ "Midterm calling"
-        g2.setColor(new Color(40, 120, 40));
+        g2.setColor(new Color(120, 0, 0));
         g2.setFont(new Font("Arial", Font.BOLD, 22));
-        g2.drawString("Midterm calling", phoneX+18, phoneY+phoneH/2);
+        g2.drawString("Midterm is", phoneX+55, phoneY+phoneH/2-60);
+        g2.drawString("calling you...", phoneX+50, phoneY+phoneH/2-30);
 
-        // สัญลักษณ์สายโทรเข้า
-        g2.setColor(new Color(80, 180, 80));
-        g2.setStroke(new BasicStroke(6));
-        g2.drawArc(phoneX+40, phoneY+phoneH/2+30, 40, 40, 30, 120);
+        // ปุ่มวางสาย (Reject) เป็นวงกลมสีแดง
+        int btnX = phoneX + phoneW/2;
+        int btnY = phoneY + phoneH - 54;
+        g2.setColor(new Color(220, 40, 40));
+        g2.fillOval(phoneX+phoneW/2+25, phoneY+phoneH/2+70, 45, 45);
 
         // วงกลมสายเข้า
         g2.setColor(new Color(80, 180, 80));
-        g2.fillOval(phoneX+phoneW/2-16, phoneY+phoneH/2+60, 32, 32);
+        g2.fillOval(phoneX+phoneW/4-16, phoneY+phoneH/2+70, 45, 45);
+
+        // วาดสัญลักษณ์โทรศัพท์คว่ำบนปุ่ม
+        g2.setColor(Color.WHITE);
+        g2.setStroke(new BasicStroke(8));
+        int arcW = 28, arcH = 16;
+        g2.drawArc(phoneX+phoneW/2+33, phoneY+phoneH/2+84, arcW, arcH, 200, 140); // โทรศัพท์คว่ำ
+        // วาดปลายสาย (วงกลมเล็กๆ)
+        g2.fillOval(btnX - arcW + 56, btnY + arcH/2 - 49, 12, 12); // ซ้าย
+        g2.fillOval(btnX - arcW + 82, btnY + arcH/2 - 49, 12, 12); // ขวา
+
+        // วาดสัญลักษณ์โทรศัพท์หงายบนปุ่ม
+        g2.setColor(Color.WHITE);
+        g2.setStroke(new BasicStroke(8));
+        g2.drawArc(phoneX+phoneW/2-62, phoneY+phoneH/2+86, arcW, arcH, 45, 100); // โทรศัพท์หงาย
+        // วาดปลายสาย (วงกลมเล็กๆ)
+        g2.fillOval(btnX - arcW - 39, btnY + arcH/2 - 47, 12, 12); // ซ้าย
+        g2.fillOval(btnX - arcW - 13, btnY + arcH/2 - 47, 12, 12); // ขวา
+
+        
+  
     };
 }
     private static double clamp(double v, double lo, double hi) {
