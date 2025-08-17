@@ -201,10 +201,27 @@ public class TestPro extends JPanel implements ActionListener {
 
         // สีทอง
         g2.setColor(new Color(240, 220, 150));
-        // แกนยาว (vertical)
-        g2.fillRect(crossCenterX - crossWidth / 2, crossCenterY - crossHeight / 8 + 25, crossWidth, crossHeight);
-        // แกนขวาง (horizontal)
-        g2.fillRect(crossCenterX - crossBarWidth / 2, crossCenterY - crossBarHeight + 60, crossBarWidth, crossBarHeight);
+
+        // --- แกนยาว (vertical) ---
+        Polygon vertical = new Polygon();
+        vertical.addPoint(crossCenterX - crossWidth / 2, crossCenterY - crossHeight / 8 + 25); // บนซ้าย
+        vertical.addPoint(crossCenterX + crossWidth / 2, crossCenterY - crossHeight / 8 + 25); // บนขวา
+        vertical.addPoint(crossCenterX + crossWidth / 2, crossCenterY - crossHeight / 8 + 25 + crossHeight); // ล่างขวา
+        vertical.addPoint(crossCenterX - crossWidth / 2, crossCenterY - crossHeight / 8 + 25 + crossHeight); // ล่างซ้าย
+        g2.fillPolygon(vertical);
+        
+
+        // --- แกนขวาง (horizontal) ---
+        g2.setColor(new Color(240, 220, 150));
+        Polygon horizontal = new Polygon();
+        horizontal.addPoint(crossCenterX - crossBarWidth / 2, crossCenterY - crossBarHeight + 60); // ซ้ายบน
+        horizontal.addPoint(crossCenterX + crossBarWidth / 2, crossCenterY - crossBarHeight + 60); // ขวาบน
+        horizontal.addPoint(crossCenterX + crossBarWidth / 2, crossCenterY - crossBarHeight + 60 + crossBarHeight); // ขวาล่าง
+        horizontal.addPoint(crossCenterX - crossBarWidth / 2, crossCenterY - crossBarHeight + 60 + crossBarHeight); // ซ้ายล่าง
+        g2.fillPolygon(horizontal);
+        
+        
+        g2.setStroke(new BasicStroke(2)); // คืนความหนาเส้นขอบ
     }
 
     private void drawLyingPerson(Graphics2D g2, int cx, int cy, int height) {
